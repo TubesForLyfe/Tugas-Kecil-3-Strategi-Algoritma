@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.event.*;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.List;
+import java.util.ArrayList;
 
 public class GUI implements ActionListener {
     private static JLabel filenameLabel;
@@ -184,7 +186,6 @@ public class GUI implements ActionListener {
         int i;
         Puzzle p = new Puzzle();
         p.bacaFile(filenameInput.getText());
-        GUI.setNumber(p);
         filenameInput.setText("");
         for (i = 0; i < 16; i++) {
             sum_Kurang += p.Kurang((i + 1) % 16);
@@ -198,72 +199,81 @@ public class GUI implements ActionListener {
             // Inisialisasi variabel yang dibutuhkan
             QPuzzle = new PrioPuzzle(p);
             checkPuzzle = new PrioPuzzle(p);
+            List<Puzzle> result = new ArrayList<>();
             Timer timer = new Timer();
-            int time = 1500;
+            int time = 1200;
             processLabel.setForeground(Color.BLACK);
             process = QPuzzle.puzzle[0];
-            processLabel.setText("Processing: Simpul " + process.getSimpul());
 
             // Proses tiap langkah pergeseran puzzle
             while (!process.isSolution()) {
+                process = QPuzzle.dequeue();
+                x = process.getIdxRow(0);
+                y = process.getIdxCol(x, 0);
+                if (x == 0) {
+                    if (y == 0) {
+                        QPuzzle.enqueue(process.Right(), checkPuzzle);
+                        QPuzzle.enqueue(process.Down(), checkPuzzle);  
+                    } else if (y == 3) {
+                        QPuzzle.enqueue(process.Down(), checkPuzzle);
+                        QPuzzle.enqueue(process.Left(), checkPuzzle);
+                    } else {
+                        QPuzzle.enqueue(process.Right(), checkPuzzle);
+                        QPuzzle.enqueue(process.Down(), checkPuzzle);
+                        QPuzzle.enqueue(process.Left(), checkPuzzle); 
+                    }
+                } else if (x == 3) {
+                    if (y == 0) {
+                        QPuzzle.enqueue(process.Up(), checkPuzzle);
+                        QPuzzle.enqueue(process.Right(), checkPuzzle); 
+                    } else if (y == 3) {
+                        QPuzzle.enqueue(process.Up(), checkPuzzle);
+                        QPuzzle.enqueue(process.Left(), checkPuzzle); 
+                    } else {
+                        QPuzzle.enqueue(process.Up(), checkPuzzle);
+                        QPuzzle.enqueue(process.Right(), checkPuzzle); 
+                        QPuzzle.enqueue(process.Left(), checkPuzzle); 
+                    }
+                } else {
+                    if (y == 0) {
+                        QPuzzle.enqueue(process.Up(), checkPuzzle);
+                        QPuzzle.enqueue(process.Right(), checkPuzzle); 
+                        QPuzzle.enqueue(process.Down(), checkPuzzle); 
+                    } else if (y == 3) {
+                        QPuzzle.enqueue(process.Up(), checkPuzzle);
+                        QPuzzle.enqueue(process.Down(), checkPuzzle); 
+                        QPuzzle.enqueue(process.Left(), checkPuzzle); 
+                    } else {
+                        QPuzzle.enqueue(process.Up(), checkPuzzle);
+                        QPuzzle.enqueue(process.Right(), checkPuzzle);
+                        QPuzzle.enqueue(process.Down(), checkPuzzle); 
+                        QPuzzle.enqueue(process.Left(), checkPuzzle); 
+                    }
+                }
+            }
+            
+            // Memasukkan urutan puzzle solusi ke dalam process
+            while (process != null) {
+                result.add(0, process);
+                process = process.getParrent();
+            }
+
+            // Mengeluarkan urutan puzzle solusi ke layar
+            for (Puzzle allresult : result) {
                 TimerTask task = new TimerTask() {
                     public void run() {
-                        x = process.getIdxRow(0);
-                        y = process.getIdxCol(x, 0);
-                        if (x == 0) {
-                            if (y == 0) {
-                                QPuzzle.enqueue(QPuzzle.puzzle[0].Right(), checkPuzzle);
-                                QPuzzle.enqueue(QPuzzle.puzzle[0].Down(), checkPuzzle);  
-                            } else if (y == 3) {
-                                QPuzzle.enqueue(QPuzzle.puzzle[0].Down(), checkPuzzle);
-                                QPuzzle.enqueue(QPuzzle.puzzle[0].Left(), checkPuzzle);
-                            } else {
-                                QPuzzle.enqueue(QPuzzle.puzzle[0].Right(), checkPuzzle);
-                                QPuzzle.enqueue(QPuzzle.puzzle[0].Down(), checkPuzzle);
-                                QPuzzle.enqueue(QPuzzle.puzzle[0].Left(), checkPuzzle); 
-                            }
-                        } else if (x == 3) {
-                            if (y == 0) {
-                                QPuzzle.enqueue(QPuzzle.puzzle[0].Up(), checkPuzzle);
-                                QPuzzle.enqueue(QPuzzle.puzzle[0].Right(), checkPuzzle); 
-                            } else if (y == 3) {
-                                QPuzzle.enqueue(QPuzzle.puzzle[0].Up(), checkPuzzle);
-                                QPuzzle.enqueue(QPuzzle.puzzle[0].Left(), checkPuzzle); 
-                            } else {
-                                QPuzzle.enqueue(QPuzzle.puzzle[0].Up(), checkPuzzle);
-                                QPuzzle.enqueue(QPuzzle.puzzle[0].Right(), checkPuzzle); 
-                                QPuzzle.enqueue(QPuzzle.puzzle[0].Left(), checkPuzzle); 
-                            }
-                        } else {
-                            if (y == 0) {
-                                QPuzzle.enqueue(QPuzzle.puzzle[0].Up(), checkPuzzle);
-                                QPuzzle.enqueue(QPuzzle.puzzle[0].Right(), checkPuzzle); 
-                                QPuzzle.enqueue(QPuzzle.puzzle[0].Down(), checkPuzzle); 
-                            } else if (y == 3) {
-                                QPuzzle.enqueue(QPuzzle.puzzle[0].Up(), checkPuzzle);
-                                QPuzzle.enqueue(QPuzzle.puzzle[0].Down(), checkPuzzle); 
-                                QPuzzle.enqueue(QPuzzle.puzzle[0].Left(), checkPuzzle); 
-                            } else {
-                                QPuzzle.enqueue(QPuzzle.puzzle[0].Up(), checkPuzzle);
-                                QPuzzle.enqueue(QPuzzle.puzzle[0].Right(), checkPuzzle);
-                                QPuzzle.enqueue(QPuzzle.puzzle[0].Down(), checkPuzzle); 
-                                QPuzzle.enqueue(QPuzzle.puzzle[0].Left(), checkPuzzle); 
-                            }
-                        }
-                        process = QPuzzle.dequeue();
-                        process = QPuzzle.puzzle[0];
-                        processLabel.setText("Processing: Simpul " + process.getSimpul());
-                        GUI.setNumber(process);
-                        if (process.isSolution()) {
+                        processLabel.setText("Processing: Simpul " + allresult.getSimpul());
+                        GUI.setNumber(allresult);
+                        if (allresult.isSolution()) {
                             timer.cancel();
                             processLabel.setForeground(Color.GREEN);
-                            processLabel.setText("Solution: Simpul " + process.getSimpul());
-                            process.resetSimpul();
+                            processLabel.setText("Solution: Simpul " + allresult.getSimpul());
+                            allresult.resetSimpul();
                         }
                     }
                 };
                 timer.schedule(task, time);
-                time += 1200;
+                time += 1000;
             }
         }
     }

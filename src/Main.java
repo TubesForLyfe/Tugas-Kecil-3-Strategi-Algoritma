@@ -1,4 +1,4 @@
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -53,71 +53,79 @@ public class Main {
             // Inisialisasi variabel yang dibutuhkan
             QPuzzle = new PrioPuzzle(p);
             checkPuzzle = new PrioPuzzle(p);
+            List<Puzzle> result = new ArrayList<>();
             process = QPuzzle.puzzle[0];
-            System.out.println("Simpul " + process.getSimpul());
-            System.out.println();
-            process.output();
 
             // Proses tiap langkah pergeseran puzzle
             while (!process.isSolution()) {
-                startTime = System.nanoTime();
+                process = QPuzzle.dequeue();
+                if (process.isSolution()) {
+                    break;
+                }
                 x = process.getIdxRow(0);
                 y = process.getIdxCol(x, 0);
+                startTime = System.nanoTime();
                 if (x == 0) {
                     if (y == 0) {
-                        QPuzzle.enqueue(QPuzzle.puzzle[0].Right(), checkPuzzle);
-                        QPuzzle.enqueue(QPuzzle.puzzle[0].Down(), checkPuzzle);  
+                        QPuzzle.enqueue(process.Right(), checkPuzzle);
+                        QPuzzle.enqueue(process.Down(), checkPuzzle);  
                     } else if (y == 3) {
-                        QPuzzle.enqueue(QPuzzle.puzzle[0].Down(), checkPuzzle);
-                        QPuzzle.enqueue(QPuzzle.puzzle[0].Left(), checkPuzzle);
+                        QPuzzle.enqueue(process.Down(), checkPuzzle);
+                        QPuzzle.enqueue(process.Left(), checkPuzzle);
                     } else {
-                        QPuzzle.enqueue(QPuzzle.puzzle[0].Right(), checkPuzzle);
-                        QPuzzle.enqueue(QPuzzle.puzzle[0].Down(), checkPuzzle);
-                        QPuzzle.enqueue(QPuzzle.puzzle[0].Left(), checkPuzzle); 
+                        QPuzzle.enqueue(process.Right(), checkPuzzle);
+                        QPuzzle.enqueue(process.Down(), checkPuzzle);
+                        QPuzzle.enqueue(process.Left(), checkPuzzle); 
                     }
                 } else if (x == 3) {
                     if (y == 0) {
-                        QPuzzle.enqueue(QPuzzle.puzzle[0].Up(), checkPuzzle);
-                        QPuzzle.enqueue(QPuzzle.puzzle[0].Right(), checkPuzzle); 
+                        QPuzzle.enqueue(process.Up(), checkPuzzle);
+                        QPuzzle.enqueue(process.Right(), checkPuzzle); 
                     } else if (y == 3) {
-                        QPuzzle.enqueue(QPuzzle.puzzle[0].Up(), checkPuzzle);
-                        QPuzzle.enqueue(QPuzzle.puzzle[0].Left(), checkPuzzle); 
+                        QPuzzle.enqueue(process.Up(), checkPuzzle);
+                        QPuzzle.enqueue(process.Left(), checkPuzzle); 
                     } else {
-                        QPuzzle.enqueue(QPuzzle.puzzle[0].Up(), checkPuzzle);
-                        QPuzzle.enqueue(QPuzzle.puzzle[0].Right(), checkPuzzle); 
-                        QPuzzle.enqueue(QPuzzle.puzzle[0].Left(), checkPuzzle); 
+                        QPuzzle.enqueue(process.Up(), checkPuzzle);
+                        QPuzzle.enqueue(process.Right(), checkPuzzle); 
+                        QPuzzle.enqueue(process.Left(), checkPuzzle); 
                     }
                 } else {
                     if (y == 0) {
-                        QPuzzle.enqueue(QPuzzle.puzzle[0].Up(), checkPuzzle);
-                        QPuzzle.enqueue(QPuzzle.puzzle[0].Right(), checkPuzzle); 
-                        QPuzzle.enqueue(QPuzzle.puzzle[0].Down(), checkPuzzle); 
+                        QPuzzle.enqueue(process.Up(), checkPuzzle);
+                        QPuzzle.enqueue(process.Right(), checkPuzzle); 
+                        QPuzzle.enqueue(process.Down(), checkPuzzle); 
                     } else if (y == 3) {
-                        QPuzzle.enqueue(QPuzzle.puzzle[0].Up(), checkPuzzle);
-                        QPuzzle.enqueue(QPuzzle.puzzle[0].Down(), checkPuzzle); 
-                        QPuzzle.enqueue(QPuzzle.puzzle[0].Left(), checkPuzzle); 
+                        QPuzzle.enqueue(process.Up(), checkPuzzle);
+                        QPuzzle.enqueue(process.Down(), checkPuzzle); 
+                        QPuzzle.enqueue(process.Left(), checkPuzzle); 
                     } else {
-                        QPuzzle.enqueue(QPuzzle.puzzle[0].Up(), checkPuzzle);
-                        QPuzzle.enqueue(QPuzzle.puzzle[0].Right(), checkPuzzle);
-                        QPuzzle.enqueue(QPuzzle.puzzle[0].Down(), checkPuzzle); 
-                        QPuzzle.enqueue(QPuzzle.puzzle[0].Left(), checkPuzzle); 
+                        QPuzzle.enqueue(process.Up(), checkPuzzle);
+                        QPuzzle.enqueue(process.Right(), checkPuzzle);
+                        QPuzzle.enqueue(process.Down(), checkPuzzle); 
+                        QPuzzle.enqueue(process.Left(), checkPuzzle); 
                     }
                 }
-                process = QPuzzle.dequeue();
-                process = QPuzzle.puzzle[0];
                 stopTime = System.nanoTime();
                 exeTime += (stopTime - startTime)/1000000;
-                System.out.println();
-                System.out.println("Simpul " + process.getSimpul());
-                System.out.println();
-                process.output();
             }
             
+            // Memasukkan urutan puzzle solusi ke dalam process
+            while (process != null) {
+                result.add(0, process);
+                process = process.getParrent();
+            }
+
+            // Mengeluarkan urutan puzzle solusi ke layar
+            for (Puzzle allresult : result) {
+                System.out.println("Simpul " + allresult.getSimpul());
+                System.out.println();
+                allresult.output();
+                System.out.println();
+            }
+
             // Output total simpul dan waktu eksekusi program
-            System.out.println();
             System.out.println("Execution Time: " + exeTime + " ms");
             System.out.println("Total simpul yang terbentuk adalah sebanyak " + p.getAllSimpul() + " simpul");
-            System.out.println();
         }
     }
 }

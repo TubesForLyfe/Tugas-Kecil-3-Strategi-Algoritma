@@ -4,14 +4,15 @@ import java.io.*;
 public class Puzzle {
     // Atribut
     static int id = 0;
+    private Puzzle parrent;
     private int simpul;
 	public int[][] matrix;
     private int cost;
-    private int kedalaman;
 
 	/* CONSTRUCTOR */
 	public Puzzle() {	
         int i, j;
+        this.parrent = null;
         id++;
         this.simpul = id;
 		this.matrix = new int[4][4];
@@ -21,7 +22,6 @@ public class Puzzle {
 			}
 		}
         this.cost = 0;
-        this.kedalaman = 0;
 	}
 
     public Puzzle(Puzzle p) {
@@ -35,7 +35,6 @@ public class Puzzle {
 			}
 		}
         this.cost = p.cost;
-        this.kedalaman = p.kedalaman + 1;
     }
 
     // Method
@@ -76,6 +75,11 @@ public class Puzzle {
 		}
 	}
 
+    public Puzzle getParrent() {
+        // Mengembalikan puzzle parrent
+        return this.parrent;
+    }
+
     public int getSimpul() {
         // Mengembalikan nilai simpul
         return this.simpul;
@@ -99,11 +103,6 @@ public class Puzzle {
     public int getCost() {
         // Mengembalikan cost
         return this.cost;
-    }
-
-    public int kedalaman() {
-        // Mengembalikan kedalaman
-        return this.kedalaman;
     }
 
     public int getIdxCol(int row, int number) {
@@ -212,7 +211,8 @@ public class Puzzle {
         int temp = result.matrix[x][y];
         result.matrix[x][y] = result.matrix[x - 1][y];
         result.matrix[x - 1][y] = temp;
-        result.cost = result.calculateCost() + result.kedalaman;
+        result.cost = result.calculateCost();
+        result.parrent = this;
         return result;
     }
 
@@ -224,7 +224,8 @@ public class Puzzle {
         int temp = result.matrix[x][y];
         result.matrix[x][y] = result.matrix[x + 1][y];
         result.matrix[x + 1][y] = temp;
-        result.cost = result.calculateCost() + result.kedalaman;   
+        result.cost = result.calculateCost();
+        result.parrent = this; 
         return result;
     }
 
@@ -236,7 +237,8 @@ public class Puzzle {
         int temp = result.matrix[x][y];
         result.matrix[x][y] = result.matrix[x][y - 1];
         result.matrix[x][y - 1] = temp;
-        result.cost = result.calculateCost() + result.kedalaman;
+        result.cost = result.calculateCost();
+        result.parrent = this;
         return result;
     }
 
@@ -248,7 +250,8 @@ public class Puzzle {
         int temp = result.matrix[x][y];
         result.matrix[x][y] = result.matrix[x][y + 1];
         result.matrix[x][y + 1] = temp;
-        result.cost = result.calculateCost() + result.kedalaman;
+        result.cost = result.calculateCost();
+        result.parrent = this;
         return result;
     }
 }
