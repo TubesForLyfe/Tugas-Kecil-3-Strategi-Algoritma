@@ -50,7 +50,7 @@ public class Main {
         if ((sum_Kurang + p.getX()) % 2 != 0) {
             System.out.println("15-Puzzle tidak dapat diselesaikan");
         } else {
-            // Inisialisi variabel yang dibutuhkan
+            // Inisialisasi variabel yang dibutuhkan
             QPuzzle = new PrioPuzzle(p);
             checkPuzzle = new PrioPuzzle(p);
             process = QPuzzle.puzzle[0];

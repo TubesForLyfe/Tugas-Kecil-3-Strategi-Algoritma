@@ -34,6 +34,7 @@ public class GUI implements ActionListener {
     private static Puzzle process;
 
     public static void main(String[] args) {
+        // Inisialisasi GUI
         JPanel panel = new JPanel();
         JFrame frame = new JFrame("15-Puzzle Game");
         frame.setSize(550, 400);
@@ -194,7 +195,7 @@ public class GUI implements ActionListener {
             processLabel.setForeground(Color.RED);
             p.resetSimpul();
         } else {
-            // Inisialisi variabel yang dibutuhkan
+            // Inisialisasi variabel yang dibutuhkan
             QPuzzle = new PrioPuzzle(p);
             checkPuzzle = new PrioPuzzle(p);
             Timer timer = new Timer();
@@ -268,6 +269,7 @@ public class GUI implements ActionListener {
     }
 
     public static String convertToString(int number) {
+        // Mengubah integer menjadi string dalam label
         if (number == 0) {
             return "  ";
         } else {
@@ -281,6 +283,7 @@ public class GUI implements ActionListener {
     }
 
     public static void setNumber(Puzzle p) {
+        // Mengubah label puzzle
         puzzle1.setText(convertToString(p.matrix[0][0]));
         puzzle2.setText(convertToString(p.matrix[0][1]));
         puzzle3.setText(convertToString(p.matrix[0][2]));
