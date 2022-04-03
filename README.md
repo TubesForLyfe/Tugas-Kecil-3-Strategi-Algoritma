@@ -21,13 +21,13 @@ https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html
 ```
 > java Main
 ```
-Atau dapat dijalankan dengan langsung membuka <strong>Main.bat</strong>
+Atau dapat dijalankan secara langsung dengan membuka <strong>Main.bat</strong>
 
 - Jika ingin mengeksekusi program berbasis GUI, jalankan perintah berikut di terminal pada direktori sebelumnya hasil kompilasi atau secara langsung pada direktori bin
 ```
 > java GUI
 ```
-Atau dapat dijalankan dengan langsung membuka <strong>GUI.bat</strong>
+Atau dapat dijalankan secara langsung dengan membuka <strong>GUI.bat</strong>
 
 ### Author
 Willy Wilsen - 13520160
