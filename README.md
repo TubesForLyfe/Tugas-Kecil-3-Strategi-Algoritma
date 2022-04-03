@@ -12,18 +12,18 @@ https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html
 
 ### Cara menggunakan program
 
-Jika ingin melakukan kompilasi terhadap source code, jalankan perintah berikut di terminal pada direktori src
+- Jika ingin melakukan kompilasi terhadap source code, jalankan perintah berikut di terminal pada direktori src
 ```
 > javac Puzzle.java PrioPuzzle.java Main.java GUI.java
 ```
 
-Jika ingin mengeksekusi program berbasis CLI, jalankan perintah berikut di terminal pada direktori sebelumnya hasil kompilasi atau secara langsung pada direktori bin
+- Jika ingin mengeksekusi program berbasis CLI, jalankan perintah berikut di terminal pada direktori sebelumnya hasil kompilasi atau secara langsung pada direktori bin
 ```
 > java Main
 ```
 Atau dapat dijalankan dengan langsung membuka <strong>Main.bat</strong>
 
-Jika ingin mengeksekusi program berbasis GUI, jalankan perintah berikut di terminal pada direktori sebelumnya hasil kompilasi atau secara langsung pada direktori bin
+- Jika ingin mengeksekusi program berbasis GUI, jalankan perintah berikut di terminal pada direktori sebelumnya hasil kompilasi atau secara langsung pada direktori bin
 ```
 > java GUI
 ```
