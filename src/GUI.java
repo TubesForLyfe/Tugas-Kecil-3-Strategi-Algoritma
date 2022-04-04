@@ -13,6 +13,9 @@ public class GUI implements ActionListener {
     private static JTextField filenameInput;
     private static JButton button;
     private static JLabel processLabel;
+    private static JLabel authorLabel;
+    private static JLabel timeLabel;
+    private static JLabel simpulLabel;
     private static JLabel puzzle1;
     private static JLabel puzzle2;
     private static JLabel puzzle3;
@@ -34,6 +37,7 @@ public class GUI implements ActionListener {
     private static PrioPuzzle QPuzzle;
     private static PrioPuzzle checkPuzzle;
     private static Puzzle process;
+    private static long exeTime;
 
     public static void main(String[] args) {
         // Inisialisasi GUI
@@ -62,6 +66,18 @@ public class GUI implements ActionListener {
         processLabel = new JLabel("Solution Puzzle");
         processLabel.setBounds(100, 50, 400, 50);
         panel.add(processLabel);
+
+        authorLabel = new JLabel("13520160 Willy Wilsen");
+        authorLabel.setBounds(200, 300, 400, 50);
+        panel.add(authorLabel);
+
+        timeLabel = new JLabel("");
+        timeLabel.setBounds(250, 100, 400, 50);
+        panel.add(timeLabel);
+
+        simpulLabel = new JLabel("");
+        simpulLabel.setBounds(250, 125, 400, 50);
+        panel.add(simpulLabel);
 
         // Label for 15-Puzzle
         Border lineBorder = BorderFactory.createLineBorder(Color.BLACK);
@@ -193,6 +209,7 @@ public class GUI implements ActionListener {
 
         if ((sum_Kurang + p.getX()) % 2 != 0) {
             processLabel.setText("Warning: 15-Puzzle cannot be solved");
+            GUI.setNumber(p);
             processLabel.setForeground(Color.RED);
             p.resetSimpul();
         } else {
@@ -203,13 +220,22 @@ public class GUI implements ActionListener {
             Timer timer = new Timer();
             int time = 1200;
             processLabel.setForeground(Color.BLACK);
+            processLabel.setText("Solution Puzzle");
+            timeLabel.setText("");
+            simpulLabel.setText("");
             process = QPuzzle.puzzle[0];
+            long startTime, stopTime;
+            exeTime = 0;
 
             // Proses tiap langkah pergeseran puzzle
             while (!process.isSolution()) {
                 process = QPuzzle.dequeue();
+                if (process.isSolution()) {
+                    break;
+                }
                 x = process.getIdxRow(0);
                 y = process.getIdxCol(x, 0);
+                startTime = System.nanoTime();
                 if (x == 0) {
                     if (y == 0) {
                         QPuzzle.enqueue(process.Right(), checkPuzzle);
@@ -250,6 +276,8 @@ public class GUI implements ActionListener {
                         QPuzzle.enqueue(process.Left(), checkPuzzle); 
                     }
                 }
+                stopTime = System.nanoTime();
+                exeTime += (stopTime - startTime)/1000000;
             }
             
             // Memasukkan urutan puzzle solusi ke dalam process
@@ -268,6 +296,8 @@ public class GUI implements ActionListener {
                             timer.cancel();
                             processLabel.setForeground(Color.GREEN);
                             processLabel.setText("Solution: Simpul " + allresult.getSimpul());
+                            timeLabel.setText("Execution Time: " + exeTime + " ms");
+                            simpulLabel.setText("Total simpul: " + allresult.getAllSimpul() + " simpul");
                             allresult.resetSimpul();
                         }
                     }
